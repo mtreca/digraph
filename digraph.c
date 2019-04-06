@@ -1,11 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <wchar.h>
+#include <locale.h>
+
 
 typedef struct digraph {
-	char x;
-	char y;
-	int  d;
+	wint_t x;
+	wint_t y;
+	wint_t d;
 } digr_T;
 
 static digr_T digraphtable[] = {
@@ -237,7 +240,7 @@ static digr_T digraphtable[] = {
 	{'y',  '"',  0xff},
 };
 
-static int getdigraph(int x, int y) {
+static wint_t getdigraph(wint_t x, wint_t y) {
 
 	digr_T *dp;
 	dp = digraphtable;
@@ -253,9 +256,9 @@ static int getdigraph(int x, int y) {
 
 }
 
-int digraph(int x, int y) {
+wint_t digraph(wint_t x, wint_t y) {
 
-	int d;
+	wint_t d;
 
 	if (((d = getdigraph(x, y)) == y) && ((d = getdigraph(y, x)) == x)) {
 		return x;
@@ -267,24 +270,26 @@ int digraph(int x, int y) {
 
 void read_stdin() {
 
-	int c, x, y;
+	wint_t c, x, y;
 
-	while ((c = getc(stdin)) != EOF) {
+	while ((c = getwc(stdin)) != WEOF) {
 		if (c == '#') {
-			if (((x = getc(stdin)) > 31) && ((y = getc(stdin)) > 31)) {
-				putchar(digraph(x, y));
+			if (((x = getwc(stdin)) > 31) && ((y = getwc(stdin)) > 31)) {
+				putwchar(digraph(x, y));
 			}
 		} else {
-			putchar(c);
+			putwchar(c);
 		}
 	}
 
 }
 
-int main()
-{
+int main() {
+
+	setlocale(LC_CTYPE, "");
+
 	if (isatty(0)) {
-		fprintf(stderr, "File input is not yet implemented.\n");
+		wprintf(L"File input is not yet implemented.\n");
 		return 1;
 	} else {
 		read_stdin();
