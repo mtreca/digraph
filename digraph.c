@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <wchar.h>
 #include <locale.h>
-
 
 typedef struct digraph {
 	wint_t x;
@@ -240,7 +240,9 @@ static digr_T digraphtable[] = {
 	{'y',  '"',  0xff},
 };
 
-static wint_t getdigraph(wint_t x, wint_t y) {
+wint_t
+getdigraph(wint_t x, wint_t y)
+{
 
 	digr_T *dp;
 	dp = digraphtable;
@@ -256,7 +258,9 @@ static wint_t getdigraph(wint_t x, wint_t y) {
 
 }
 
-wint_t digraph(wint_t x, wint_t y) {
+wint_t
+digraph(wint_t x, wint_t y)
+{
 
 	wint_t d;
 
@@ -268,12 +272,14 @@ wint_t digraph(wint_t x, wint_t y) {
 
 }
 
-void read_stdin() {
+void
+read_stdin(wint_t s)
+{
 
 	wint_t c, x, y;
 
 	while ((c = getwc(stdin)) != WEOF) {
-		if (c == '#') {
+		if (c == s) {
 			if (((x = getwc(stdin)) > 31) && ((y = getwc(stdin)) > 31)) {
 				putwchar(digraph(x, y));
 			}
@@ -284,15 +290,41 @@ void read_stdin() {
 
 }
 
-int main() {
+void
+usage()
+{
+	fprintf(stderr, "usage: digraph [-sh]\n");
+	exit(1);
+}
+
+int
+main(int argc, char *argv[])
+{
 
 	setlocale(LC_CTYPE, "");
 
-	if (isatty(0)) {
-		wprintf(L"File input is not yet implemented.\n");
-		return 1;
-	} else {
-		read_stdin();
-		return 0;
+	int opt;
+	char *c;
+	wint_t s = '#';
+
+	while((opt = getopt(argc, argv, "s:h")) != -1) {
+		switch(opt) {
+			case 's':
+				c = optarg;
+				if (strlen(c) != 1) {
+					fprintf(stderr, "invalid separator: %s\n", c);
+					exit(1);
+				}
+				s = c[0];
+				break;
+			case 'h':
+			default:
+				usage();
+				break;
+		}
 	}
+
+	read_stdin(s);
+	return 0;
+
 }
