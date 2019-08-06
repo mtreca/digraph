@@ -1,0 +1,20 @@
+.Dd August 06, 2019
+.Dt DIGRAPH 1
+.Sh NAME
+.Nm digraph
+.Nd parse vim-style diacritics in text streams
+.Sh SYNOPSIS
+.Nm digraph
+.Op Fl s
+.Ar sep
+.Sh DESCRIPTION
+.Nm
+will parse text streams from stdin and attempt to combine two characters following a separator character (defaults to '#') using vim's RFC1345 digraph symbol table.
+if no matching digraph can be found, the two characters are output unmodified.
+.Bl -tag -width Ds
+.It Fl s
+Use custom separator
+.Ar sep .
+.Sh SEE ALSO
+.Xr vim 1
+.Xr kak 1

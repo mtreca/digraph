@@ -1,23 +1,25 @@
 CC = gcc
 CFLAGS  = -pedantic -Wall -Wextra
 
-PREFIX = /usr/local
-
-PROG = digraph
+PREFIX = /usr/
+MANPREFIX = /usr/share/man
 
 all: $(PROG)
 
-$(PROG): $(PROG).c
-	$(CC) $(CFLAGS) -o $(PROG) $(PROG).c
+digraph: digraph.c
+	$(CC) $(CFLAGS) -o digraph digraph.c
 
 clean:
-	$(RM) $(PROG)
+	$(RM) digraph
 
-install: $(PROG)
+install: digraph
 	mkdir -p ${DESTDIR}${PREFIX}/bin
-	cp $(PROG) ${DESTDIR}${PREFIX}/bin/$(PROG)
-	chmod 755 ${DESTDIR}${PREFIX}/bin/$(PROG)
+	cp digraph ${DESTDIR}${PREFIX}/bin/digraph
+	chmod 755 ${DESTDIR}${PREFIX}/bin/digraph
+	mkdir -p ${DESTDIR}${MANPREFIX}/man1/
+	cp -f digraph.1 ${DESTDIR}${MANPREFIX}/man1/
 
 uninstall:
-	rm ${DESTDIR}${PREFIX}/bin/$(PROG)
+	rm ${DESTDIR}${PREFIX}/bin/digraph
+	rm -f ${DESTDIR}${MANPREFIX}/man1/digraph.1
 
