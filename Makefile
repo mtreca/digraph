@@ -4,7 +4,7 @@ CFLAGS  = -pedantic -Wall -Wextra
 PREFIX = /usr/
 MANPREFIX = /usr/share/man
 
-all: $(PROG)
+all: digraph
 
 digraph: digraph.c
 	$(CC) $(CFLAGS) -o digraph digraph.c
