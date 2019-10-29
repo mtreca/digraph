@@ -248,9 +248,8 @@ getdigraph(wint_t x, wint_t y)
 	dp = digraphtable;
 
 	for (int i = 0; dp->x != 0; ++i) {
-		if (dp->x == x && dp->y == y) {
+		if (dp->x == x && dp->y == y)
 			return dp->d;
-		}
 		++dp;
 	}
 
@@ -326,5 +325,4 @@ main(int argc, char *argv[])
 
 	read_stdin(s);
 	return 0;
-
 }
